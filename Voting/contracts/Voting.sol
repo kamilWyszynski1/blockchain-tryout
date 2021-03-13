@@ -58,7 +58,7 @@ contract Voting {
         _voter.delegated = _addr;
         _voter.voted = true; // not really, delegated person could not vote at all
 
-        Voter memory _delegated = voters[_addr];
+        Voter storage _delegated = voters[_addr];
         if (_delegated.voted) {
             candidates[_delegated.inx].votes++;
         } else {
