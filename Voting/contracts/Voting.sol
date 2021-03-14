@@ -18,7 +18,9 @@ contract Voting {
         address delegated; // voter can delegate another voter to vote insted of origin voter
     }
 
+    int256 public votedCount;
     mapping(address => Voter) public voters;
+
     Candidate[] public candidates;
 
     constructor(string[] memory _candidates) {
@@ -71,10 +73,16 @@ contract Voting {
         _;
     }
 
-    function vote(uint256 _proposal) public onlyOnce {
+    modifier withRight {
+        require(voters[msg.sender].hasRight, "Person does not have rights");
+        _;
+    }
+
+    function vote(uint256 _proposal) public onlyOnce withRight {
         candidates[_proposal].votes += voters[msg.sender].weight;
         voters[msg.sender].voted = true;
         voters[msg.sender].inx = _proposal;
+        votedCount++;
     }
 
     function winningCandidate() public view returns (string memory winner) {

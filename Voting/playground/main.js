@@ -11,10 +11,9 @@ web3.eth.getBalance("0x158E1291EAC7ecf2F0E2B644C0bE9b03Aa6f5C0D", function (erro
         console.log('Huston we have a promblem: ', error); // Should dump errors here
 });
 
-web3.eth.getAccounts().
-    then((accounts) => { console.log(accounts) })
+const DEFAULT_ACCOUNT = "0x158E1291EAC7ecf2F0E2B644C0bE9b03Aa6f5C0D";
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
-console.log(VotingABI);
 const voting = new web3.eth.Contract([
     {
         "inputs": [
@@ -159,9 +158,49 @@ const voting = new web3.eth.Contract([
         "type": "function",
         "constant": true
     }
-], '0x05A014f793781d7e809bB4E0D232f1D87668ff27');
+], '0x9896D25e4BA5490BaF0a57141B02D74a6817a14E');
+
+// call 
+// voting.methods.vote(0).call({ from: "0xdAaaB42639a2014688a860bE0ffA24445C0A888e" })
+//     .then(function (result) {
+//         console.log("call", result);
+//     })
+
+// send 
+
+voting.methods.giveRightToVote("0xef1922Ad5b6C78BAA021B3e65ED00Dc64dC5C36F").send({ from: DEFAULT_ACCOUNT })
+    .then(function (result) {
+        console.log("rights: ", result);
+    })
+
+
+voting.methods.giveRightToVote("0x2143102C70858959453bdd9c58A7F9E493f17146").send({ from: DEFAULT_ACCOUNT })
+    .then(function (result) {
+        console.log("rights: ", result);
+    })
+
+// voting.methods.vote(0).send({
+//     from: "0x3a45E68e2B1399201669F4832f8c7AB2c6dB7b04"
+// })
+//     .then(function (result) {
+//         console.log("call", result);
+//     })
+
+voting.methods.delegateVoter("0x2143102C70858959453bdd9c58A7F9E493f17146").send({ from: "0xef1922Ad5b6C78BAA021B3e65ED00Dc64dC5C36F" })
+
+voting.methods.vote(0).send({
+    from: "0x2143102C70858959453bdd9c58A7F9E493f17146"
+})
+    .then(function (result) {
+        console.log("call", result);
+    })
 
 voting.methods.candidates(0).call(function (error, result) {
     console.log(result);
     console.log(error)
 });
+
+
+voting.methods.voters("0x3a45E68e2B1399201669F4832f8c7AB2c6dB7b04").call(function (error, result) {
+    console.log("voters: ", error, result)
+})

@@ -27,6 +27,11 @@ module.exports = {
       defaultEtherBalance: 1000,
       blockTime: 3,
       from: "0x2fa641471003a6ec413bf919b8a61C1f64Fe0600",
+    },
+    test: {
+      host: "127.0.0.1",
+      port: 7545,
+      network_id: "*"
     }
   },
   compilers: {

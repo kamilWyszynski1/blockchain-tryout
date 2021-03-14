@@ -37,3 +37,7 @@ Repository created only in educational purposes.
 * shared, distributed ledger on which transactions are recorded
 * contains whole history 
 * `consensus protocol`
+
+**Web3:**
+* send changes state of SmartContract
+* call does not 
