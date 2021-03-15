@@ -28,5 +28,17 @@ contract('Will', (accounts) => {
         assert.equal(deposit['0'].toString(), web3.utils.toWei('2', 'ether').toString(), "amount does not match")
         assert.equal(deposit['2'].toString(), '2592000', "offsets do not match")
 
+    });
+    it('should raise error beacuse deposit is not created', async () => {
+        const acc = accounts[3];
+        let err = null
+        try {
+            await instance.withdraw(acc, { from: acc })
+        } catch (error) {
+            err = error
+            assert.equal(error.reason, "Deposit does not exist")
+        }
+        assert.ok(err instanceof Error)
+
     })
 })
