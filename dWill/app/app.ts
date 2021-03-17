@@ -1,6 +1,10 @@
 import express = require("express");
 import Web3 from 'web3';
 import { Request, Response, NextFunction } from 'express';
+import bodyParser from 'body-parser';
+import moment from 'moment';
+
+import testController from './controllers/test'
 
 class ApiHandler {
     web3Handler: Web3Caller
@@ -45,22 +49,26 @@ let web3 = new Web3("http://localhost:8545");
 // Create a new express app instance
 const app: express.Application = express();
 
+app.use(express.json()); //Used to parse JSON bodies
+
 const web3Cli: Web3Caller = new Web3Handler(web3);
 const handler: ApiHandler = new ApiHandler(web3Cli);
 
 function loggerMiddleware(request: Request, response: Response, next: NextFunction) {
-    console.log(`${request.method} ${request.path}`);
+    let now: string = (moment(new Date())).format('DD-MMM-YYYY HH:mm:ss')
+    console.info(`${now}: [INFO] ${request.method} ${request.path}, body: ${request.body}`);
     next();
 }
 
 app.use(loggerMiddleware);
-
 
 app.get("/", function (req, res) {
     res.send("Hello World!");
 });
 
 app.get('/balance/:wallet', handler.getWalletBalance.bind(handler))
+
+app.post('/test', testController.testRoute)
 
 app.listen(3000, function () {
     console.log("App is listening on port 3000!");
