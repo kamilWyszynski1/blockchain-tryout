@@ -5,6 +5,9 @@ import bodyParser from 'body-parser';
 import moment from 'moment';
 
 import testController from './controllers/test'
+import Handler from './db/handler';
+import { Will, Person } from "./models/will";
+import test from "./controllers/test";
 
 class ApiHandler {
     web3Handler: Web3Caller
@@ -56,7 +59,7 @@ const handler: ApiHandler = new ApiHandler(web3Cli);
 
 function loggerMiddleware(request: Request, response: Response, next: NextFunction) {
     let now: string = (moment(new Date())).format('DD-MMM-YYYY HH:mm:ss')
-    console.info(`${now}: [INFO] ${request.method} ${request.path}, body: ${request.body}`);
+    console.info(`${now}: [INFO] ${request.method} ${request.path}`);
     next();
 }
 
@@ -73,3 +76,20 @@ app.post('/test', testController.testRoute)
 app.listen(3000, function () {
     console.log("App is listening on port 3000!");
 });
+
+
+const testator: Person = {
+    name: "testator",
+    surname: "testatorSur",
+    wallet: "testatorWallet",
+    email: "testatorEmail"
+}
+
+const heir: Person = {
+    name: "heir",
+    surname: "heirSur",
+    wallet: "heirWallet",
+    email: "heirEmail"
+}
+
+Handler.insert(new Will(testator, heir, 123))
