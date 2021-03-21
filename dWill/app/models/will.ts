@@ -1,36 +1,36 @@
-interface Person {
-    name: string
-    surname: string
-    wallet: string
-    email: string
-}
+import mongoose, { Schema } from 'mongoose';
+import logging from '../config/logging';
+import IWill from '../interfaces/will';
 
-class Will {
-    testator: Person
-    heir: Person
-    timeOffset: Number
-
-    constructor(testator: Person, heir: Person, timeOffset: number) {
-        this.testator = testator;
-        this.heir = heir;
-        this.timeOffset = timeOffset;
+var WillSchema: Schema = new Schema(
+    {
+        testatorName: { type: String, required: true },
+        testatorSurname: { type: String, required: true },
+        testatorWallet: { type: String, required: true },
+        testatorEmail: { type: String, required: true },
+        heirName: { type: String, required: true },
+        heirSurname: { type: String, required: true },
+        heirWallet: { type: String, required: true },
+        heirEmail: { type: String, required: true },
+        nextPingDeadline: { type: Number, required: true }
+    },
+    {
+        timestamps: true
     }
+);
 
-    public toDoc() {
-        return {
-            testatorName: this.testator.name,
-            testatorSurname: this.testator.surname,
-            testatorWallet: this.testator.wallet,
-            testatorEmail: this.testator.email,
-            heirName: this.heir.name,
-            heirSurname: this.heir.surname,
-            heirWallet: this.heir.wallet,
-            heirEmail: this.heir.email,
-            timeOffset: this.timeOffset
-        }
+WillSchema.on('index', function (err) {
+    if (err) {
+        console.error('User index error: %s', err);
+    } else {
+        console.info('User indexing complete');
     }
-}
+});
 
-export {
-    Person, Will
-}
+WillSchema.index({ testatorWallet: 1, heirWallet: -1 }, { unique: true });
+
+WillSchema.post<IWill>('save', function () {
+    logging.info('Mongo', 'Checkout the will we just saved: ', this);
+});
+
+export default mongoose.model<IWill>('Will', WillSchema);
