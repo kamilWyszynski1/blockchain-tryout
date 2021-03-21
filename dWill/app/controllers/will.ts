@@ -85,7 +85,6 @@ const getTestatorWills = (req: Request, res: Response, next: NextFunction) => {
 
 const getWalletBalance = async (req: Request, res: Response, next: NextFunction) => {
     const balance = await bcHandler.getWalletBalance(req.params['wallet']);
-    console.log("balance: ", balance);
 
     return res.status(200).json({
         balance: balance

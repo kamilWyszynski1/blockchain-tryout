@@ -34,6 +34,9 @@ class Web3Handler {
         return new Promise((resolve) => {
             resolve(this.web3Cli.utils.fromWei(balance, "ether").substring(0, this.maxWalletChars));
         })
+    }
+
+    async createDeposit() {
 
     }
 }
