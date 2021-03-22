@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+const { abi } = require('../../blockchain/build/contracts/Will.json');
 
 dotenv.config();
 
@@ -39,13 +40,20 @@ const BC_SERVER_PORT = process.env.BC_SERVER_PORT || 8545;
 const BLOCKCHAIN = {
     hostname: BC_SERVER_HOSTNAME,
     port: BC_SERVER_PORT,
-    url: `http://${BC_SERVER_HOSTNAME}:${BC_SERVER_PORT}`
+    url: `http://${BC_SERVER_HOSTNAME}:${BC_SERVER_PORT}`,
+    willContractAddress: "0x8a9eE50750C8E33bcc1D990421e23a58464365D0",
+    abi: abi,
+}
+
+const JOBS = {
+    deadlinedWillsSleep: 1800000 // miliseconds
 }
 
 const config = {
     mongo: MONGO,
     server: SERVER,
-    blockchain: BLOCKCHAIN
+    blockchain: BLOCKCHAIN,
+    jobs: JOBS
 };
 
 export default config;

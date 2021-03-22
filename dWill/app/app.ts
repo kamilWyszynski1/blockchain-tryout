@@ -41,12 +41,7 @@ app.use((req, res, next) => {
     next();
 });
 
-
-
-app.get("/", function (req, res) {
-    res.send("Hello World!");
-});
-
+// ROUTING
 app.post('/will', controller.createWill)
 app.get('/will', controller.getAllWills)
 app.get('/will/:wallet', controller.getTestatorWills)
@@ -57,4 +52,4 @@ app.listen(3000, function () {
 });
 
 
-setInterval(willJob, 5000)
+setInterval(willJob, config.jobs.deadlinedWillsSleep)

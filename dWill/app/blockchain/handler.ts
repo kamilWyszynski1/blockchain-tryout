@@ -1,10 +1,16 @@
 import Web3 from 'web3';
+import { Contract } from 'web3-eth-contract';
+import logging from '../config/logging';
+
+const NAMESPACE = "HANDLER";
 
 class BcHandler {
     web3Handler: Web3Caller
+    contract: Contract
 
-    constructor(cli: Web3) {
+    constructor(cli: Web3, contract: Contract) {
         this.web3Handler = new Web3Handler(cli);
+        this.contract = contract;
     }
 
     async getWalletBalance(wallet: string): Promise<string> {
@@ -12,6 +18,19 @@ class BcHandler {
         return new Promise((resolve) => {
             resolve(walletBalance)
         })
+    }
+
+    async createDeposit(_from: string, _to: string, _value: string): Promise<any | null> {
+        this.contract.methods.createDeposit(
+            _to, 50000,
+        )
+            .send({ from: _from, value: _value })
+            .then((result: any) => {
+                return new Promise(_ => { })
+            }).catch((err: Error) => {
+                return new Promise((resolve) => { resolve(err) })
+            });
+
     }
 }
 

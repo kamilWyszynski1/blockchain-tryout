@@ -13,11 +13,36 @@ web3.eth.net.isListening()
     .then(() => logging.info(NAMESPACE, "web3 connected"))
     .catch(e => logging.error(NAMESPACE, "web3 connection error", e));
 
-const bcHandler = new BcHandler(web3);
+const bcHandler = new BcHandler(web3, new web3.eth.Contract(config.blockchain.abi, config.blockchain.willContractAddress));
 
-const createWill = (req: Request, res: Response, next: NextFunction) => {
-    let { testatorName, testatorSurname, testatorWallet, testatorEmail, heirName, heirSurname, heirWallet, heirEmail, timeOffset } = req.body;
+const createWill = async (req: Request, res: Response, next: NextFunction) => {
+    let {
+        testatorName,
+        testatorSurname,
+        testatorWallet,
+        testatorEmail,
+        heirName,
+        heirSurname,
+        heirWallet,
+        heirEmail,
+        timeOffset,
+        value,
+    } = req.body;
     const now = new Date();
+    console.log('here');
+
+    const result = await bcHandler.createDeposit(
+        testatorWallet,
+        heirWallet,
+        web3.utils.toWei("1", "ether"),
+    )
+
+    if (result != null) {
+        logging.error(NAMESPACE, "error when creating deposit", result)
+        res.status(500).send({
+            message: "error occured during deposit creation"
+        })
+    }
 
     const nextPingDeadline = now.getTime() + timeOffset;
     const will = new Will({
