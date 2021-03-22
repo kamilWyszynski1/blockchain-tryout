@@ -29,20 +29,23 @@ const createWill = async (req: Request, res: Response, next: NextFunction) => {
         value,
     } = req.body;
     const now = new Date();
-    console.log('here');
 
-    const result = await bcHandler.createDeposit(
-        testatorWallet,
-        heirWallet,
-        web3.utils.toWei("1", "ether"),
-    )
+    try {
+        await bcHandler.createDeposit(
+            testatorWallet,
+            heirWallet,
+            web3.utils.toWei("1", "ether"),
+        )
+        console.log("here");
 
-    if (result != null) {
-        logging.error(NAMESPACE, "error when creating deposit", result)
+    } catch (err) {
+        logging.error(NAMESPACE, "error when creating deposit", err.data)
         res.status(500).send({
             message: "error occured during deposit creation"
         })
+        return
     }
+
 
     const nextPingDeadline = now.getTime() + timeOffset;
     const will = new Will({

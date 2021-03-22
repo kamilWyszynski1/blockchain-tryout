@@ -41,7 +41,7 @@ const BLOCKCHAIN = {
     hostname: BC_SERVER_HOSTNAME,
     port: BC_SERVER_PORT,
     url: `http://${BC_SERVER_HOSTNAME}:${BC_SERVER_PORT}`,
-    willContractAddress: "0x8a9eE50750C8E33bcc1D990421e23a58464365D0",
+    willContractAddress: "0xe24Fa2052E5ba370d629fa100EE273e0CD219FcB",
     abi: abi,
 }
 

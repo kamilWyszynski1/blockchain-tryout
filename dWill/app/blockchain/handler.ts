@@ -20,17 +20,18 @@ class BcHandler {
         })
     }
 
-    async createDeposit(_from: string, _to: string, _value: string): Promise<any | null> {
-        this.contract.methods.createDeposit(
-            _to, 50000,
-        )
-            .send({ from: _from, value: _value })
-            .then((result: any) => {
-                return new Promise(_ => { })
-            }).catch((err: Error) => {
-                return new Promise((resolve) => { resolve(err) })
-            });
-
+    async createDeposit(_from: string, _to: string, _value: string): Promise<Error | null> {
+        return new Promise((resolve, reject) => {
+            this.contract.methods.createDeposit(
+                _to, 50000,
+            )
+                .send({ from: _from, value: _value })
+                .then((result: any) => {
+                    resolve(result)
+                }).catch((err: Error) => {
+                    reject(err)
+                });
+        }) as Promise<Error | null>;
     }
 }
 
